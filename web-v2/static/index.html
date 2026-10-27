@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f5f6fa">
+    <title>STARz Booklet Maker</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <script src="/static/app.js" defer></script>
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="/" aria-label="STARz Booklet Maker home">
+          <span class="brand-mark" aria-hidden="true">S</span>
+          <span>STARz <span class="brand-light">Booklet Maker</span></span>
+        </a>
+        <div class="appearance-controls">
+          <label class="appearance-control">
+            <span>Theme</span>
+            <select id="theme-select" aria-label="Color theme">
+              <option value="light">Light</option>
+              <option value="dark">Dark</option>
+              <option value="system">System default</option>
+            </select>
+          </label>
+          <label class="appearance-control accent-control">
+            <span>Accent</span>
+            <select id="accent-select" aria-label="Accent color">
+              <option value="#3478F6">Blue</option>
+              <option value="#8250DF">Violet</option>
+              <option value="#159957">Emerald</option>
+              <option value="#0F9D9A">Teal</option>
+              <option value="#E64980">Rose</option>
+              <option value="#D97706">Amber</option>
+              <option value="#DC2626">Crimson</option>
+              <option value="#4F46E5">Indigo</option>
+              <option value="#00B4DB">Ocean Gradient</option>
+              <option value="#FF5F6D">Sunset Gradient</option>
+              <option value="#00B09B">Aurora Gradient</option>
+              <option value="#8E2DE2">Berry Gradient</option>
+              <option value="#F12711">Fire Gradient</option>
+              <option value="#F953C6">Cotton Candy Gradient</option>
+            </select>
+          </label>
+        </div>
+      </header>
+
+      <section class="intro">
+        <div>
+          <p class="eyebrow">YOUR PRINT WORKFLOW, SIMPLIFIED</p>
+          <h1>Make a booklet.<br><span>Page by page.</span></h1>
+          <p class="intro-copy">Choose the pages you need. We’ll arrange them in
+            the right order for folding and printing.</p>
+        </div>
+        <div class="paper-preview" aria-hidden="true">
+          <div class="paper paper-back"></div>
+          <div class="paper paper-front"><span>8</span><i></i><span>1</span></div>
+          <div class="fold-line"></div>
+        </div>
+      </section>
+
+      <section class="workspace" aria-label="Booklet workspace">
+        <div class="upload-panel" id="upload-panel">
+          <div class="upload-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M12 16V4m0 0L7 9m5-5 5 5M5 14v5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-5"/></svg>
+          </div>
+          <h2>Start with your PDF</h2>
+          <p>Drop a file here, or browse your device</p>
+          <label class="button button-primary upload-button" for="pdf-input">Choose PDF</label>
+          <input id="pdf-input" type="file" accept="application/pdf,.pdf" hidden>
+          <span class="file-hint">PDF only · Up to 50 MB</span>
+        </div>
+
+        <div id="editor" class="editor" hidden>
+          <div class="document-bar">
+            <div class="document-info">
+              <span class="pdf-icon">PDF</span>
+              <div>
+                <strong id="filename"></strong>
+                <span id="page-summary" class="muted"></span>
+              </div>
+            </div>
+            <button id="change-file" class="button button-quiet" type="button">Change PDF</button>
+          </div>
+
+          <div class="selection-toolbar">
+            <div class="selection-count"><strong id="selected-count">0</strong>
+              <span id="selection-total">of 0 pages selected</span></div>
+            <div class="selection-actions">
+              <button class="text-button" data-action="all" type="button">Select all</button>
+              <span class="action-divider"></span>
+              <button class="text-button" data-action="none" type="button">Clear</button>
+              <span class="action-divider"></span>
+              <button class="text-button" data-action="odd" type="button">Odd</button>
+              <button class="text-button" data-action="even" type="button">Even</button>
+            </div>
+          </div>
+
+          <form id="range-form" class="range-form">
+            <label for="page-range">Select pages</label>
+            <input id="page-range" type="text" placeholder="e.g. 1-8, 11, 14-16"
+              autocomplete="off">
+            <button class="button button-secondary" type="submit">Apply range</button>
+            <span class="range-help">Enter page numbers or ranges separated by commas.</span>
+          </form>
+
+          <div class="pages-heading">
+            <div><h2>Your pages</h2><p>Click a page to include or remove it.</p></div>
+            <span class="page-total" id="page-total"></span>
+          </div>
+          <div class="preview-controls">
+            <label for="columns-select">Thumbnails per row</label>
+            <select id="columns-select" aria-label="Thumbnails per row">
+              <option value="2">2</option>
+              <option value="3" selected>3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+            </select>
+            <label class="quality-control" for="quality-slider">Thumbnail quality</label>
+            <input id="quality-slider" type="range" min="10" max="100" step="10" value="60">
+            <output id="quality-value" for="quality-slider">60%</output>
+            <span class="mobile-grid-note">Mobile preview uses 2 columns.</span>
+          </div>
+          <div id="page-grid" class="page-grid" aria-live="polite"></div>
+
+          <div class="generate-bar">
+            <div class="output-note"><span class="check-icon" aria-hidden="true">✓</span>
+              <span><strong>Ready for print</strong><small>A4 landscape · Blank pages added as needed</small></span>
+            </div>
+            <button id="generate" class="button button-primary generate-button" type="button">
+              <span>Generate booklet</span><span aria-hidden="true">→</span>
+            </button>
+          </div>
+        </div>
+        <div id="notice" class="notice" role="status" aria-live="polite" hidden></div>
+      </section>
+
+      <footer><span>STARz Booklet Maker</span><span>Arrange · Fold · Print</span></footer>
+    </main>
+  </body>
+</html>
